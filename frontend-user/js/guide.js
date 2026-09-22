@@ -20,15 +20,17 @@ class GuideManager {
      */
     init() {
         this.bindEvents();
-        
-        // 检查是否需要显示引导
-        if (!Storage.isGuideCompleted()) {
+
+        // 检查是否需要显示引导（只读分享视图中不显示引导）
+        if (!Storage.isGuideCompleted() && !ShareManager.isShareViewActive()) {
             this.show();
         }
-        
+
         // 监听显示引导事件
         window.addEventListener('showGuide', () => {
-            this.show();
+            if (!ShareManager.isShareViewActive()) {
+                this.show();
+            }
         });
     }
     

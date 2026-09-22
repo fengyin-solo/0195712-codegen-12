@@ -7,7 +7,8 @@ class App {
         this.interactionManager = null;
         this.guideManager = null;
         this.quizManager = null;
-        
+        this.shareManager = null;
+
         this.init();
     }
     
@@ -33,7 +34,10 @@ class App {
         
         // 初始化交互管理器
         this.interactionManager = new InteractionManager(this.canvasManager);
-        
+
+        // 初始化只读分享（需在引导之前，打开分享链接时直接进入只读视图）
+        this.shareManager = new ShareManager(this.canvasManager);
+
         // 初始化引导系统
         this.guideManager = new GuideManager();
         
