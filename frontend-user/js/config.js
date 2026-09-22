@@ -9,7 +9,8 @@ const CONFIG = {
     STORAGE_KEYS: {
         DESIGNS: 'optics_designs',
         SETTINGS: 'optics_settings',
-        GUIDE_COMPLETED: 'optics_guide_completed'
+        GUIDE_COMPLETED: 'optics_guide_completed',
+        SHARED_DESIGNS: 'optics_shared_designs'
     },
     
     // 透镜类型
@@ -62,6 +63,13 @@ const CONFIG = {
         rayCount: 5,
         angle: 0,
         wavelength: 550 // 绿光波长(nm)
+    },
+
+    // 只读分享
+    SHARE: {
+        URL_PARAM: 'shared',
+        // 本地保存的分享记录上限
+        MAX_RECORDS: 20
     },
     
     // 颜色配置
@@ -452,6 +460,7 @@ Object.freeze(CONFIG.MATERIALS);
 Object.freeze(CONFIG.LENS_DEFAULTS);
 Object.freeze(CONFIG.LIGHT_MODES);
 Object.freeze(CONFIG.LIGHT_DEFAULTS);
+Object.freeze(CONFIG.SHARE);
 Object.freeze(CONFIG.COLORS);
 Object.freeze(CONFIG.RENDER);
 Object.freeze(CONFIG.HELP_TEXTS);

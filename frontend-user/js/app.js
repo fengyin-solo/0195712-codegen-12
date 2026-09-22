@@ -7,7 +7,11 @@ class App {
         this.interactionManager = null;
         this.guideManager = null;
         this.quizManager = null;
-        
+        this.shareManager = null;
+
+        // 通过分享链接打开时进入只读视图，不初始化编辑器交互
+        this.isShareView = ShareManager.isViewingShare();
+
         this.init();
     }
     
@@ -27,25 +31,34 @@ class App {
      */
     setup() {
         console.log('光学设计实验室 v' + CONFIG.VERSION);
-        
+
         // 初始化画布管理器
         this.canvasManager = new CanvasManager();
-        
+
+        // 初始化只读分享管理器（分享链接直接打开时只提供只读视图）
+        this.shareManager = new ShareManager(this.canvasManager);
+
+        if (this.isShareView) {
+            // 只读模式：不启用任何编辑、测验与引导交互
+            console.log('已进入只读分享视图');
+            return;
+        }
+
         // 初始化交互管理器
         this.interactionManager = new InteractionManager(this.canvasManager);
-        
+
         // 初始化引导系统
         this.guideManager = new GuideManager();
-        
+
         // 初始化测验管理器
         this.quizManager = new QuizManager(this.canvasManager);
-        
+
         // 初始化知识点提示
         this.initKnowledgeTips();
-        
+
         // 初始化测验模式事件
         this.initQuizMode();
-        
+
         console.log('应用初始化完成');
     }
     

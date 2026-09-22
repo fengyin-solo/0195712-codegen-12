@@ -260,6 +260,16 @@
                         </select>
                     </div>
                     <div class="toolbar-right">
+                        <button class="btn btn-tool" id="btn-share" title="生成只读分享链接">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="18" cy="5" r="3"/>
+                                <circle cx="6" cy="12" r="3"/>
+                                <circle cx="18" cy="19" r="3"/>
+                                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                            </svg>
+                            <span>分享</span>
+                        </button>
                         <button class="btn btn-tool" id="btn-toggle-labels" title="显示/隐藏标注">
                             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M4 7V4h16v3"/>
@@ -346,6 +356,118 @@
         </footer>
     </div>
 
+    <!-- 分享模态框 -->
+    <div id="share-modal" class="modal-overlay hidden">
+        <div class="modal share-modal">
+            <div class="modal-header">
+                <h3>🔗 生成分享记录</h3>
+                <button class="btn btn-icon" id="btn-share-close" title="关闭">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="share-desc">已把当前画布的实验配置生成一份<strong>只读</strong>分享记录，他人打开链接只能查看光路与参数，不能改动或删除。</p>
+                <div class="form-group">
+                    <label class="form-label" for="share-title-input">记录名称（可选）</label>
+                    <input type="text" class="form-input" id="share-title-input" maxlength="30" placeholder="例如：凸透镜聚焦实验">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">分享链接</label>
+                    <div class="share-link-row">
+                        <input type="text" class="form-input" id="share-link-input" readonly>
+                        <button class="btn btn-secondary" id="btn-copy-share-link">复制</button>
+                    </div>
+                </div>
+                <p class="share-empty-hint hidden" id="share-empty-hint">
+                    ⚠️ 当前画布上还没有透镜，这份分享记录只包含光源设置，打开后将看不到光路。
+                </p>
+                <div class="share-saved-note hidden" id="share-saved-note">✅ 分享记录已保存在本设备</div>
+            </div>
+            <div class="modal-footer share-modal-footer">
+                <button class="btn btn-secondary" id="btn-share-cancel">取消</button>
+                <button class="btn btn-primary" id="btn-preview-share">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    预览只读视图
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 只读分享视图 -->
+    <div id="share-view" class="share-view hidden" aria-readonly="true">
+        <header class="share-header">
+            <div class="share-header-left">
+                <span class="app-logo">🔬</span>
+                <h1 class="share-view-title" id="share-view-title">实验配置分享</h1>
+                <span class="readonly-badge">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                    只读
+                </span>
+            </div>
+            <div class="share-header-right">
+                <button class="btn btn-tool" id="btn-share-toggle-light" title="启动/暂停光路">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="5 3 19 12 5 21 5 3"/>
+                    </svg>
+                    <span>启动光路</span>
+                </button>
+                <select class="select-light-mode" id="share-light-mode" disabled>
+                    <option value="parallel">平行光</option>
+                    <option value="point">点光源</option>
+                </select>
+                <button class="btn btn-tool" id="btn-share-toggle-labels" title="显示/隐藏标注">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 7V4h16v3"/>
+                        <path d="M9 20h6"/>
+                        <path d="M12 4v16"/>
+                    </svg>
+                    <span>标注</span>
+                </button>
+                <button class="btn btn-primary" id="btn-share-back">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="19" y1="12" x2="5" y2="12"/>
+                        <polyline points="12 19 5 12 12 5"/>
+                    </svg>
+                    <span>返回主界面</span>
+                </button>
+            </div>
+        </header>
+        <main class="share-main">
+            <aside class="sidebar share-sidebar">
+                <div class="sidebar-header">
+                    <h2 class="sidebar-title">配置参数（只读）</h2>
+                </div>
+                <div class="sidebar-content">
+                    <div class="share-meta" id="share-meta"></div>
+                    <div class="share-notices" id="share-notices"></div>
+                    <div class="share-lens-list" id="share-lens-list"></div>
+                </div>
+            </aside>
+            <section class="canvas-section share-canvas-section">
+                <div class="readonly-strip">
+                    <span>🔒 你正在查看他人分享的实验配置，只能查看光路与参数，不能改动或删除</span>
+                </div>
+                <div class="canvas-wrapper share-canvas-wrapper" id="share-canvas-wrapper">
+                    <canvas id="share-canvas"></canvas>
+                    <div class="share-canvas-empty hidden" id="share-canvas-empty">
+                        <div class="empty-icon">📭</div>
+                        <p>这份分享记录中没有透镜</p>
+                        <span>只能查看到画布与光源设置</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
     <!-- 帮助提示框 -->
     <div class="tooltip hidden" id="help-tooltip">
         <div class="tooltip-content"></div>
@@ -364,6 +486,7 @@
     <script src="js/quiz.js"></script>
     <script src="js/interaction.js"></script>
     <script src="js/guide.js"></script>
+    <script src="js/share.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

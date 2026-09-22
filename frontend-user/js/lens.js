@@ -12,7 +12,13 @@ class Lens {
         this.curvature = options.curvature || CONFIG.LENS_DEFAULTS.curvature;
         this.material = options.material || CONFIG.LENS_DEFAULTS.material;
         this.selected = false;
-        
+
+        // 显式提供折射率时（如从分享记录/存档恢复），保留该数值，
+        // 不被材料默认折射率覆盖；仅新建透镜才跟随材料取默认值
+        if (options.refractiveIndex !== undefined && options.refractiveIndex !== null) {
+            this._initialized = true;
+        }
+
         // 根据材料设置默认参数
         this.applyMaterial(this.material);
     }
